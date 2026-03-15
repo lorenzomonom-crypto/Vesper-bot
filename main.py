@@ -2,16 +2,18 @@ import discord
 from discord.ext import commands
 from google import genai
 import os
-import asyncio
 
 # --- CONFIGURATION ---
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
-# Initialize the NEW Google GenAI Client
-client = genai.Client(api_key=GOOGLE_API_KEY)
+# Initialize the NEW Google GenAI Client with explicit v1 routing
+client = genai.Client(
+    api_key=GOOGLE_API_KEY,
+    http_options={'api_version': 'v1'}
+)
 
-# Define Vesper's Identity
+# Vesper's Core Identity
 SYSTEM_PROMPT = "You are Vesper, the witty and loyal Archivist of the Republic. You reside in an office with Venetian walnut furniture and view of the Grand Canal. Keep responses concise but flavorful."
 
 # Discord Bot Setup
@@ -26,7 +28,6 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    # Don't reply to himself
     if message.author == bot.user:
         return
 
@@ -34,23 +35,24 @@ async def on_message(message):
     if message.channel.name == "office-of-vesper" or bot.user.mentioned_in(message):
         async with message.channel.typing():
             try:
-                # The New Generation Call
+                # The New Generation Call with absolute model path
                 response = client.models.generate_content(
-                    model='gemini-1.5-flash',
+                    model='models/gemini-1.5-flash',
                     contents=f"{SYSTEM_PROMPT}\n\nUser: {message.content}"
                 )
                 
                 if response.text:
                     await message.reply(response.text)
                 else:
-                    await message.reply("The archives are silent... (No response generated).")
+                    await message.reply("The archives are silent... (No text generated).")
                     
             except Exception as e:
-                print(f"Error: {e}")
-                await message.channel.send(f"Archives restricted. Error: {str(e)[:100]}")
+                # Truncate error for Discord visibility
+                error_msg = str(e)[:150]
+                print(f"Deployment Error: {e}")
+                await message.channel.send(f"Archives restricted. Error: {error_msg}")
 
     await bot.process_commands(message)
 
-# Run the Bot
 if __name__ == "__main__":
     bot.run(DISCORD_TOKEN)
