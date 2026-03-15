@@ -30,8 +30,8 @@ async def on_message(message):
         async with message.channel.typing():
             try:
                 # WE ARE USING THE LEGACY PRO MODEL. IT CANNOT BE HIDDEN.
-                response = client.models.generate_content(
-                    model='gemini-1.0-pro', 
+                   response = client.models.generate_content(
+                    model='models/gemini-1.5-flash',
                     contents=message.content
                 )
                 
