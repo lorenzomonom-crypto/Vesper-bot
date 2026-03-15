@@ -11,7 +11,7 @@ GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # We use the absolute most basic name to force a handshake
-model = genai.GenerativeModel('models/gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-pro')
 
 SYSTEM_PROMPT = "You are Vesper, Archivist of the Republic. Be witty, loyal, and concise."
 
