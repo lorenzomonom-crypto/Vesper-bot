@@ -8,8 +8,11 @@ DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
 # Initialize the 2026 Client - Explicitly using the Stable Channel
-client = genai.Client(api_key=GOOGLE_API_KEY)
-
+# FORCE the API version to v1 (Stable)
+client = genai.Client(
+    api_key=GOOGLE_API_KEY,
+    http_options={'api_version': 'v1'}
+)
 intents = discord.Intents.default()
 intents.message_content = True 
 bot = commands.Bot(command_prefix='/', intents=intents)
