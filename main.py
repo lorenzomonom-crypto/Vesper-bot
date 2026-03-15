@@ -10,7 +10,7 @@ GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
 # --- VESPER'S CORE LOGIC ---
 genai.configure(api_key=GOOGLE_API_KEY)
-model = genai.GenerativeModel('gemini-1.5-pro')
+model = genai.GenerativeModel('gemini-pro')
 
 # Define the spirit of the Archivist
 SYSTEM_PROMPT = (
