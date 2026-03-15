@@ -37,7 +37,7 @@ async def on_message(message):
             try:
                 # The New Generation Call with absolute model path
                 response = client.models.generate_content(
-                    model='models/gemini-1.5-flash',
+                    model='models/gemini-1.5-flash-latest',
                     contents=f"{SYSTEM_PROMPT}\n\nUser: {message.content}"
                 )
                 
